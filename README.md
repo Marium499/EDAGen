@@ -221,7 +221,7 @@ Below is the program flow for the architecture:
    ```
 3. Launch the Streamlit app:
    ```bash
-   streamlit run app.py
+   streamlit run source/core/streamlit_app.py
    ```
 
 ### Usage
