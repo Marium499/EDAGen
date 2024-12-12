@@ -1,0 +1,12 @@
+e2b_code_interpreter==1.0.3
+fastapi==0.115.6
+langchain==0.3.11
+langchain_community==0.3.11
+langchain_core==0.3.24
+langchain_openai==0.2.12
+langgraph==0.2.59
+llama_index==0.12.5
+openai==1.57.3
+pandas==2.2.3
+Pillow==11.0.0
+streamlit==1.40.2
