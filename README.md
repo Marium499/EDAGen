@@ -1,4 +1,4 @@
-# Autonomous LLM-Powered EDA Assistant
+# EDAGEN: An Agentic RAG for Autonomous Exploratory Data Analysis
 
 ## Overview
 The Autonomous EDA Assistant is an innovative project leveraging **Large Language Models (LLMs)** and a multi-agent architecture to perform **Exploratory Data Analysis (EDA)** on uploaded datasets. Designed as a minimal viable product (MVP), this application dynamically analyzes datasets, generates visualizations, identifies trends, and provides actionable insights—all without requiring explicit user instructions.

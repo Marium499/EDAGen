@@ -11,7 +11,7 @@ with st.sidebar:
     "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
     "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
 
-st.title("LLM Powered EDA BOT")
+st.title("EDAGEN: An Agentic RAG for Autonomous Exploratory Data Analysis")
 
 # if "messages" not in st.session_state:
 #     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
@@ -40,7 +40,7 @@ if uploaded_file:
     for item in eda_analysis:
         st.chat_message("assistant").write(item["question"])
         ans = item["code_answer"]
-        st.chat_message("assistant").write(ans["text_output"])
+        st.chat_message("assistant").write(ans["text_output"].replace('item:', ''))
         if ans["images"] is not None:
             with st.chat_message("assistant"):
                 for img in ans["images"]:
@@ -49,7 +49,7 @@ if uploaded_file:
                     st.image(image_path, caption='Image output')
         ans_analysis = item["answer_analysis"]
         st.chat_message("assistant").write(ans_analysis)
-
+        
 
     
 

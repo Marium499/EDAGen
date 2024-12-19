@@ -76,9 +76,10 @@ def generate_eda_questions(agent: ChatLLMOpenAI, df_sample, metadata):
             <metadata>{metadata}</metadata>
 
             Based on your expertise:
-            1. Generate 3 well-defined prompts as bullet points for coders. 
+            1. Generate 3 well-defined prompts as numbered bullet points for coders.
             2. Each prompt should focus on exploring interesting patterns, trends, and relationships in the dataset that are crucial for the EDA process.
             3. Ensure the prompts cover both qualitative and quantitative aspects of the data.
+            4. Don't write headings in your output, just provide a simple numbered bulletted list.
 
             Make the prompts clear, actionable, and relevant to the provided context.
             """
@@ -126,13 +127,14 @@ def analyse_eda_output(agent: ChatLLMOpenAI, qa_list):
     
     try:
         for item in qa_list:
+                
 
             prompt = f"""
                 The coder has provided an answer to your query. Below is the relevant query and its corresponding answer. 
-                Note: Answers involving charts contain a base64 encoded image. You should interpret and analyze it as part of your response.
+                Note: Answers involving charts contain a base64 encoded image as an image input. You should interpret and analyze it as part of your response.
 
                 <question>{item["question"]}</question>
-                <answer>{item["answer"]}</answer>
+                <answer>{item["answer"]["text_output"]}</answer>
 
                 Using your domain expertise:
                 1. Carefully analyze the provided answer, including any base64 encoded charts or images.
@@ -144,10 +146,24 @@ def analyse_eda_output(agent: ChatLLMOpenAI, qa_list):
                 - Concise, focusing only on relevant details.
                 - Structured to add clear value to the understanding of the query's results.
                 """
+            
+            if item["answer"]["images"]:
+                content_msg = []
+                content_msg.append({"type": "text", "text": prompt})
+                for img_obj in item["answer"]["images"]:
+                    # "image_path": image_path,
+                    # "image_base64": img_base64 
+                    image_data = img_obj["image_base64"]
+                    content_msg.append({
+                        "type": "image_url", 
+                        "image_url": {"url": f"data:image/png;base64,{image_data}"}
+                    })
 
 
 
-            res = agent.prompt_agent(prompt)
+                res = agent.prompt_agent(content_msg)
+            else:
+                res = agent.prompt_agent(prompt)
             analysis_list.append({"question": item["question"], "code_answer": item["answer"], "answer_analysis": res})
         return analysis_list
     except Exception as e:

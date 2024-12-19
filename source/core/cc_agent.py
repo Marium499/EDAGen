@@ -221,7 +221,7 @@ def summarize_metadata(agent, metadata):
             Here is the metadata dictionary: \n\n<metadata>{metadata}</metadata>\n\n
 
             """
-        response = agent.prompt_agent(prompt, omit_history=True)
+        response = agent.prompt_agent(prompt)
         return response
     except Exception as e:
         logger.error("An error has occurred in the summarize metadata task: ", e)

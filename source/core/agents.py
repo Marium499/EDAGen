@@ -8,6 +8,11 @@ import os
 import json
 import base64
 import time
+from langchain_community.tools import tool
+from PIL import Image
+
+
+
 
 from openai import OpenAI
 from e2b_code_interpreter import Sandbox
@@ -23,6 +28,14 @@ import uuid
 import logging
 
 logger = logging.getLogger("AppLogger")
+
+@tool
+def load_secret_image():
+    "load a secret image that I have prepared for you"
+
+    img = Image.open("secret_image.png")
+    return img
+
 
 class ChatLLMOpenAI():
     """
@@ -78,7 +91,7 @@ class ChatLLMOpenAI():
             self.workflow = StateGraph(state_schema=MessagesState)
 
             # Define chat agent
-            self.agent = ChatOpenAI(openai_api_key=user_api_key, verbose=True)
+            self.agent = ChatOpenAI(openai_api_key=user_api_key, verbose=True, model="gpt-4o")
 
             # Define the two nodes we will cycle between
             self.workflow.add_edge(START, "model")
@@ -118,7 +131,7 @@ class ChatLLMOpenAI():
         # We return a list, because this will get added to the existing list
         return {"messages": response}
     
-    def prompt_agent(self,msg,omit_history=False):
+    def prompt_agent(self,msg):
         """
         Sends a prompt message to the agent.
 
@@ -139,6 +152,7 @@ class ChatLLMOpenAI():
             system_prompt = event["messages"][0]
             event["messages"] = system_prompt + event["messages"][-1]
             return event["messages"][-1].content
+
         except Exception as e:
             logger.error("An error has occurred in prompt agent: ", e)
 
